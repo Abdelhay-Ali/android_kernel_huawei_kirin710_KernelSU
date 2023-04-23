@@ -17,9 +17,10 @@
 
 #include <linux/genalloc.h>
 #include <linux/string.h>
+#include <linux/gfp.h>
 
 #define PMALLOC_DEFAULT_ALLOC_ORDER (-1)
-
+//#define __GFP_ZERO	0
 /*
  * Library for dynamic allocation of pools of memory that can be,
  * after initialization, marked as read-only.
@@ -107,8 +108,8 @@ void *pmalloc(struct gen_pool *pool, size_t size, gfp_t gfp);
 static inline void *pzalloc(struct gen_pool *pool, size_t size, gfp_t gfp)
 {
 	//for KernelSu Abdelhay-Ali
-	//return pmalloc(pool, size, gfp | __GFP_ZERO);
-	return pmalloc(pool, size, gfp);
+	return pmalloc(pool, size, gfp | __GFP_ZERO);
+	//return pmalloc(pool, size, gfp);
 }
 
 /**
@@ -145,8 +146,8 @@ static inline void *pcalloc(struct gen_pool *pool, size_t n,
 			    size_t size, gfp_t flags)
 {
 	//for KernelSu Abdelhay-Ali
-	//return pmalloc_array(pool, n, size, flags | __GFP_ZERO);
-	return pmalloc_array(pool, n, size, flags);
+	return pmalloc_array(pool, n, size, flags | __GFP_ZERO);
+	//return pmalloc_array(pool, n, size, flags);
 }
 
 /**
