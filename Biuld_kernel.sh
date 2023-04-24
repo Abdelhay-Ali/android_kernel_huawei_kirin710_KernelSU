@@ -23,6 +23,11 @@ fi
 
 date="$(date +%d%m%Y-%I%M)"
 
+#sync with kerenSU
+curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
+
+cp sepolicy.c $(pwd)/KernelSU/kernel/selinux/
+
 echo "***Building for V9 version...***"
 make ARCH=arm64 O=out merge_kirin710_defconfig
 make ARCH=arm64 O=out -j8  2>&1 | tee log-${date}.log
