@@ -7,3 +7,4 @@ out/
 logs.txt
 drivers/kernelsu
 Biuld_kernel_exp.sh
+log-.log
