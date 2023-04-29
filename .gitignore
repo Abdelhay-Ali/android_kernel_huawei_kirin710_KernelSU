@@ -4,4 +4,6 @@ out/
 *.img
 *.zip
 *.gz
+logs.txt
 drivers/kernelsu
+Biuld_kernel_exp.sh
