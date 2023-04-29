@@ -29,9 +29,9 @@ void record_ptrace_info_before_return(long request, struct task_struct *child)
 {
 	struct task_struct *tracer;
 	struct stp_item item;
-	char tcomm_child[sizeof(child->comm)] = {0}; /*8 is reserved for unknown string*/
-	char tcomm_tracer[sizeof(child->comm)] = {0};/*comm size is same within any task*/
-	static unsigned int  g_ptrace_log_counter = 0;
+	char tcomm_child[sizeof(child->comm)] = {0};  /*8 is reserved for unknown string*/
+	char tcomm_tracer[sizeof(child->comm)] = {0}; /*comm size is same within any task*/
+	static unsigned int g_ptrace_log_counter = 0;
 	char add_info[sizeof(tcomm_child) + sizeof(tcomm_tracer) + 1] = {0};
 	int ret;
 
@@ -45,9 +45,12 @@ void record_ptrace_info_before_return(long request, struct task_struct *child)
 	(void)get_task_comm(tcomm_child, child);
 	rcu_read_lock();
 	tracer = ptrace_parent(child);
-	if (tracer) {
+	if (tracer)
+	{
 		(void)get_task_comm(tcomm_tracer, tracer);
-	} else {
+	}
+	else
+	{
 		(void)strncpy(tcomm_tracer, "unknown", sizeof("unknown"));
 	}
 	rcu_read_unlock();
@@ -57,13 +60,15 @@ void record_ptrace_info_before_return(long request, struct task_struct *child)
 	item.credible = STP_CREDIBLE;
 	item.version = 0;
 	(void)strncpy(item.name, item_info[PTRACE].name, STP_ITEM_NAME_LEN - 1);
-	(void)snprintf(add_info, sizeof(add_info) -1, "%s%s",tcomm_child, tcomm_tracer);
+	(void)snprintf(add_info, sizeof(add_info) - 1, "%s%s", tcomm_child, tcomm_tracer);
 	ret = kernel_stp_upload(item, add_info);
-	if (ret != 0) {
-		pr_err("stp ptrace upload fail, child_cmdline=%s, tracer_cmdline=%s\n",tcomm_child,tcomm_tracer);
+	if (ret != 0)
+	{
+		pr_err("stp ptrace upload fail, child_cmdline=%s, tracer_cmdline=%s\n", tcomm_child, tcomm_tracer);
 	}
-	else {
-		pr_err("stp ptrace upload succ, child_cmdline=%s, tracer_cmdline=%s\n",tcomm_child,tcomm_tracer);
+	else
+	{
+		pr_err("stp ptrace upload succ, child_cmdline=%s, tracer_cmdline=%s\n", tcomm_child, tcomm_tracer);
 	}
 
 	return;
